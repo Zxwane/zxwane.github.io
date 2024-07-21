@@ -1,7 +1,13 @@
-﻿console.log("Version 1.0");
+﻿console.log("Version 1.1");
+console.log("Patches: Fixed lag stutters in Home and Game. Fixed NaN in Calculator.");
+console.log("|!| PLEASE REPORT TO DEVELOPER IF YOU ENCOUNTER ANY BUGS OR STRANGE THINGS |!|");
 
 var isLoading = true;
-var isGame = false;
+let gameInitialized = false; // Flag to track if the game is initialized
+let gameRunning = false; // Flag to track if the game should be running
+
+// Declare game variables in a higher scope
+let gridSize, currentGalaxy, resources, credits, playerPosition, blackHolePosition, galaxy, star, starEmojis, resourceValues, gridState, borderColors, selectedMerchant, merchants, storage, warpDrive;
 
 if (isLoading == true) {
     // || GALAXY LOADER.js
@@ -264,13 +270,12 @@ if (isLoading == true) {
                     content.style.display = 'block'; // Show the main content
                     zooming = true;
                     isLoading = false;
+                    console.log('Loading sequence ended. Proceeding to main webpage.');
                 }, 3000); // Adjust timing as needed
 
             }, 3000); // Adjust timing as needed
 
         }, 1000); // 5000 milliseconds = 5 seconds
-
-        console.log('The webpage has fully loaded.');
     });
     // .*. //
 }
@@ -285,20 +290,23 @@ document.addEventListener('DOMContentLoaded', () => {
     // Function to show the selected section and hide others
     function showSection(id) {
         sections.forEach(section => {
-
-            if (id == 'game' && isGame != true) { // Bool check for optimisation
-                isGame = true;
-                initializeGame();
-            }
-            else {
-                isGame = false;
-            }
             if (section.id === id) {
                 section.classList.add('active');
             } else {
                 section.classList.remove('active');
             }
         });
+
+        if (id === 'game') {
+            if (!gameInitialized) {
+                gameInitialized = true; // Set the flag to true
+                initializeGame(); // Initialize the game only once
+            }
+            gameRunning = true; // Set the flag to run the game
+            runGame(); // Start the game loop
+        } else {
+            gameRunning = false; // Set the flag to stop the game
+        }
     }
 
     // Event listeners for navigation links
@@ -309,7 +317,7 @@ document.addEventListener('DOMContentLoaded', () => {
             showSection(targetId);
 
             // Close the menu on mobile after clicking a link
-            if (window.innerWidth <= 768) {
+            if (window.innerWidth <= 800) {
                 navMenu.classList.remove('active');
             }
         });
@@ -340,15 +348,10 @@ document.addEventListener('DOMContentLoaded', () => {
     slides[currentIndex].classList.add('active');
 
     function showNextSlide() {
+        // Start fade out and fade in using CSS transitions
         slides[currentIndex].classList.remove('active'); // Start fade out
-        setTimeout(() => {
-            slides[currentIndex].style.display = 'none'; // Complete fade out
-            currentIndex = (currentIndex + 1) % slides.length;
-            slides[currentIndex].style.display = 'flex'; // Show next slide
-            setTimeout(() => {
-                slides[currentIndex].classList.add('active'); // Start fade in
-            }, 10); // Small delay to ensure display change takes effect
-        }, 1000); // Duration of fade out (1 second)
+        currentIndex = (currentIndex + 1) % slides.length;
+        slides[currentIndex].classList.add('active'); // Start fade in
     }
 
     // Set interval for slideshow
@@ -381,7 +384,7 @@ document.addEventListener('DOMContentLoaded', () => {
             speed = spacecraftSpeeds[spacecraft];
         }
         else {
-            speed += spacecraftSpeeds[spacecraftSpeeds] // Add the spacecraft speed to the inputted speed
+            speed += spacecraftSpeeds[spacecraft]; // Add the spacecraft speed to the inputted speed
         }
 
         const distance = distances[destination];
@@ -396,420 +399,479 @@ document.addEventListener('DOMContentLoaded', () => {
 
         resultElement.textContent = resultText;
     });
-});
-// .*. //
 
-// || HERO PARALLAX.js
-window.addEventListener('scroll', function () {
-    var scrollTop = window.scrollY;
-    var Num = scrollTop / 500;
-    var Num2 = scrollTop * 0.0004; // higher number for more zoom
-    var Num2mod = Num2 + 1;
-    var Num3 = scrollTop * 0.2; // Title speed
-    var Num3mod = Num3 + 1;
+    // || TIMELINE.js
+    //const timelineItems = document.querySelectorAll('.timeline-item');
 
-    document.querySelector('.bg').style.transform = "scale(" + Num2mod + ")";
-    document.querySelector('.text').style.marginTop = "-" + Num3mod + "px";
+    //function highlightCurrentItem() {
+    //    let current = null;
+
+    //    timelineItems.forEach(item => {
+    //        const rect = item.getBoundingClientRect();
+    //        if (rect.top >= 0 && rect.top <= window.innerHeight / 2) {
+    //            current = item;
+    //        }
+    //    });
+
+    //    timelineItems.forEach(item => {
+    //        item.classList.remove('highlight');
+    //    });
+
+    //    if (current) {
+    //        current.classList.add('highlight');
+    //    }
+    //}
+
+    //window.addEventListener('scroll', highlightCurrentItem);
+    //highlightCurrentItem(); // Initial call to highlight the first visible item
 });
 // .*. //
 
 function initializeGame() {
     console.log('Game initializing...');
-    if (isGame == true) {
-        // || SPACE EXPLORER.js
-        const gridSize = 5;
-        let currentGalaxy = 'Milky Way';
-        let resources = 0;
-        let credits = 100;
-        let playerPosition = { x: 2, y: 2 }; // Start position in the center of the grid
-        let blackHolePosition = null; // To store the black hole position
-        const galaxy = ['Andromeda', 'Triangulum', 'Whirlpool', 'Sombrero'];
-        const star = ['Main Sequence', 'Red Giant', 'White Dwarf', 'Neutron Star'];
-        const starEmojis = ['🔴', '🟠', '🟡', '🟢', '🔵', '🟣', '🟤', '⚫', '⚪'];
-        const resourceValues = {
-            'Main Sequence': 10,
-            'Red Giant': 20,
-            'White Dwarf': 15,
-            'Neutron Star': 25,
-        };
-        let gridState = [];
-        const borderColors = ['#0ff', '#f0f', '#ff0', '#f00', '#0f0'];
-        let selectedMerchant = null;
-        let merchants = [
-            { name: 'Merchant A', requiredGalaxy: 'Andromeda', requiredStar: 'Red Giant', reward: 100 },
-            { name: 'Merchant B', requiredGalaxy: 'Triangulum', requiredStar: 'White Dwarf', reward: 150 },
-            { name: 'Merchant C', requiredGalaxy: 'Whirlpool', requiredStar: 'Neutron Star', reward: 200 },
-            { name: 'Merchant D', requiredGalaxy: 'Sombrero', requiredStar: 'Main Sequence', reward: 250 }
-        ];
+    // || SPACE EXPLORER.js
+    // Initialize game variables
+    gridSize = 5;
+    currentGalaxy = 'Milky Way';
+    resources = 0;
+    credits = 100;
+    playerPosition = { x: 2, y: 2 }; // Start position in the center of the grid
+    blackHolePosition = null; // To store the black hole position
+    galaxy = ['Andromeda', 'Triangulum', 'Whirlpool', 'Sombrero'];
+    star = ['Main Sequence', 'Red Giant', 'White Dwarf', 'Neutron Star'];
+    starEmojis = ['🔴', '🟠', '🟡', '🟢', '🔵', '🟣', '🟤', '⚫', '⚪'];
+    resourceValues = {
+        'Main Sequence': 10,
+        'Red Giant': 20,
+        'White Dwarf': 15,
+        'Neutron Star': 25,
+    };
+    gridState = [];
+    borderColors = ['#0ff', '#f0f', '#ff0', '#f00', '#0f0'];
+    selectedMerchant = null;
+    merchants = [
+        { name: 'Merchant A', requiredGalaxy: 'Andromeda', requiredStar: 'Red Giant', reward: 100 },
+        { name: 'Merchant B', requiredGalaxy: 'Triangulum', requiredStar: 'White Dwarf', reward: 150 },
+        { name: 'Merchant C', requiredGalaxy: 'Whirlpool', requiredStar: 'Neutron Star', reward: 200 },
+        { name: 'Merchant D', requiredGalaxy: 'Sombrero', requiredStar: 'Main Sequence', reward: 250 }
+    ];
 
-        let storage = 50;
-        let warpDrive = false;
+    storage = 50;
+    warpDrive = false;
 
-        document.addEventListener('DOMContentLoaded', () => {
-            document.getElementById('up').addEventListener('click', () => handleMovement('ArrowUp'));
-            document.getElementById('down').addEventListener('click', () => handleMovement('ArrowDown'));
-            document.getElementById('left').addEventListener('click', () => handleMovement('ArrowLeft'));
-            document.getElementById('right').addEventListener('click', () => handleMovement('ArrowRight'));
-            document.getElementById('click-left').addEventListener('click', handleMouseClickLeft);
-            document.getElementById('click-right').addEventListener('click', handleMouseClickRight);
+    // Button Handlers
+    document.getElementById('up').addEventListener('click', () => handleMovement('ArrowUp'));
+    document.getElementById('down').addEventListener('click', () => handleMovement('ArrowDown'));
+    document.getElementById('left').addEventListener('click', () => handleMovement('ArrowLeft'));
+    document.getElementById('right').addEventListener('click', () => handleMovement('ArrowRight'));
+    document.getElementById('click-left').addEventListener('click', handleMouseClickLeft);
+    document.getElementById('click-right').addEventListener('click', handleMouseClickRight);
 
-            document.getElementById('refresh-merchants').addEventListener('click', refreshMerchants);
-            document.getElementById('add-merchant').addEventListener('click', addMerchant);
+    document.getElementById('refresh-merchants').addEventListener('click', refreshMerchants);
+    document.getElementById('add-merchant').addEventListener('click', addMerchant);
 
-            // Event listeners for shop buttons
-            document.getElementById('buy-storage').addEventListener('click', buyStorage);
-            document.getElementById('buy-warp-drive').addEventListener('click', buyWarpDrive);
+    // Event listeners for shop buttons
+    document.getElementById('buy-storage').addEventListener('click', buyStorage);
+    document.getElementById('buy-warp-drive').addEventListener('click', buyWarpDrive);
+
+    generateGrid(true);
+    displayMerchants();
+}
+
+function runGame() {
+    if (!gameRunning) return; // Exit if the game should not be running
+    requestAnimationFrame(runGame); // Continue the game loop
+
+    // Game logic here (e.g., move player, check collisions)
+    renderGrid(); // Render the game grid
+}
+
+function generateGrid(isNewGalaxy) {
+    const gridContainer = document.getElementById('game-grid');
+    if (isNewGalaxy) {
+        gridState = [];
+        for (let i = 0; i < gridSize; i++) {
+            const row = [];
+            for (let j = 0; j < gridSize; j++) {
+                row.push({ type: 'empty', emoji: '' }); // Initialize with empty spaces
+            }
+            gridState.push(row);
+        }
+
+        let galaxiesPlaced = 0;
+        while (galaxiesPlaced < 3) {
+            const x = Math.floor(Math.random() * gridSize);
+            const y = Math.floor(Math.random() * gridSize);
+            if (gridState[x][y].type === 'empty') {
+                gridState[x][y] = { type: 'galaxy', name: galaxy[Math.floor(Math.random() * galaxy.length)], emoji: '🌌' };
+                galaxiesPlaced++;
+            }
+        }
+
+        // Randomly decide whether to place a black hole (1% chance)
+        if (Math.random() < 0.01) {
+            let placed = false;
+            while (!placed) {
+                const x = Math.floor(Math.random() * gridSize);
+                const y = Math.floor(Math.random() * gridSize);
+                if (gridState[x][y].type === 'empty' && isAreaEmpty(x, y)) {
+                    gridState[x][y] = { type: 'blackhole', name: 'Black Hole', emoji: '🌀' };
+                    blackHolePosition = { x, y };
+                    placed = true;
+                }
+            }
+        }
+
+        for (let i = 0; i < gridSize; i++) {
+            for (let j = 0; j < gridSize; j++) {
+                if (gridState[i][j].type === 'empty' && !(blackHolePosition && isAdjacentToBlackHole(i, j))) {
+                    let tempStar = star[Math.floor(Math.random() * star.length)];
+                    gridState[i][j] = {
+                        type: 'star',
+                        name: tempStar,
+                        emoji: starEmojis[Math.floor(Math.random() * starEmojis.length)],
+                        description: generateStarDescription(tempStar)
+                    };
+                }
+            }
+        }
+
+        // Randomly replace some stars with empty spaces
+        gridState.forEach((row, i) => {
+            row.forEach((cell, j) => {
+                if (cell.type === 'star' && Math.random() < 0.7) {
+                    gridState[i][j] = { type: 'empty', emoji: '' };
+                }
+            });
         });
+    }
+    renderGrid();
+}
 
-        generateGrid(true);
-        displayMerchants();
-
-        function generateGrid(isNewGalaxy) {
-            const gridContainer = document.getElementById('game-grid');
-            if (isNewGalaxy) {
-                gridState = [];
-                for (let i = 0; i < gridSize; i++) {
-                    const row = [];
-                    for (let j = 0; j < gridSize; j++) {
-                        row.push({ type: 'empty', emoji: '' });
-                    }
-                    gridState.push(row);
-                }
-
-                let galaxiesPlaced = 0;
-                while (galaxiesPlaced < 3) {
-                    const x = Math.floor(Math.random() * gridSize);
-                    const y = Math.floor(Math.random() * gridSize);
-                    if (gridState[x][y].type === 'empty') {
-                        gridState[x][y] = { type: 'galaxy', name: galaxy[Math.floor(Math.random() * galaxy.length)], emoji: '🌌' };
-                        galaxiesPlaced++;
-                    }
-                }
-
-                // Randomly decide whether to place a black hole (1% chance)
-                if (Math.random() < 0.01) {
-                    let placed = false;
-                    while (!placed) {
-                        const x = Math.floor(Math.random() * gridSize);
-                        const y = Math.floor(Math.random() * gridSize);
-                        if (gridState[x][y].type === 'empty' && isAreaEmpty(x, y)) {
-                            gridState[x][y] = { type: 'blackhole', name: 'Black Hole', emoji: '🌀' };
-                            blackHolePosition = { x, y };
-                            placed = true;
-                        }
-                    }
-                }
-
-                for (let i = 0; i < gridSize; i++) {
-                    for (let j = 0; j < gridSize; j++) {
-                        if (gridState[i][j].type === 'empty' && !(blackHolePosition && isAdjacentToBlackHole(i, j))) {
-                            let tempStar = star[Math.floor(Math.random() * star.length)];
-                            gridState[i][j] = {
-                                type: 'star',
-                                name: tempStar,
-                                emoji: starEmojis[Math.floor(Math.random() * starEmojis.length)],
-                                description: generateStarDescription(tempStar)
-                            };
-                        }
-                    }
-                }
-
-                // Randomly replace some stars with empty spaces
-                gridState.forEach((row, i) => {
-                    row.forEach((cell, j) => {
-                        if (cell.type === 'star' && Math.random() < 0.7) {
-                            gridState[i][j] = { type: 'empty', emoji: '' };
-                        }
-                    });
-                });
-            }
-            renderGrid();
-        }
-
-        function isAreaEmpty(x, y) {
-            const offsets = [-1, 0, 1];
-            for (let dx of offsets) {
-                for (let dy of offsets) {
-                    const nx = x + dx;
-                    const ny = y + dy;
-                    if (nx >= 0 && nx < gridSize && ny >= 0 && ny < gridSize && gridState[nx][ny].type !== 'empty') {
-                        return false;
-                    }
-                }
-            }
-            return true;
-        }
-
-        function isAdjacentToBlackHole(x, y) {
-            const offsets = [-1, 0, 1];
-            for (let dx of offsets) {
-                for (let dy of offsets) {
-                    const nx = x + dx;
-                    const ny = y + dy;
-                    if (blackHolePosition && nx === blackHolePosition.x && ny === blackHolePosition.y) {
-                        return true;
-                    }
-                }
-            }
-            return false;
-        }
-
-        function generateStarDescription(starType) {
-            const names = ['Zeta', 'Alpha', 'Omega', 'Delta', 'Epsilon'];
-            const spaceProperties = ['High Gravity', 'Low Gravity', 'Radiation Zone', 'Magnetic Fields'];
-            const weatherPatterns = ['Solar Flares', 'Calm', 'Stormy', 'Windy'];
-            const dangerLevels = ['Low', 'Medium', 'High', 'Extreme'];
-            const resources = ['Helium', 'Iron', 'Gold', 'Uranium', 'Hydrogen'];
-
-            return {
-                name: `${names[Math.floor(Math.random() * names.length)]} ${starType}`,
-                spaceProperties: spaceProperties[Math.floor(Math.random() * spaceProperties.length)],
-                weatherPatterns: weatherPatterns[Math.floor(Math.random() * weatherPatterns.length)],
-                dangerLevel: dangerLevels[Math.floor(Math.random() * dangerLevels.length)],
-                resources: resources[Math.floor(Math.random() * resources.length)]
-            };
-        }
-
-        function renderGrid() {
-            const gridContainer = document.getElementById('game-grid');
-            gridContainer.innerHTML = ''; // Clears the 'game-grid' container
-
-            const fragment = document.createDocumentFragment();
-            for (let i = 0; i < gridSize; i++) {
-                for (let j = 0; j < gridSize; j++) {
-                    const gridItem = document.createElement('div');
-                    gridItem.classList.add('game-grid-item');
-                    const cell = gridState[i][j];
-                    if (i === playerPosition.x && j === playerPosition.y) {
-                        gridItem.classList.add('ship');
-                        gridItem.textContent = '🚀';
-                    } else if (cell.type !== 'empty') {
-                        gridItem.classList.add(cell.type);
-                        gridItem.textContent = cell.emoji;
-                        gridItem.dataset.type = cell.type;
-                        gridItem.dataset.name = cell.name;
-                        if (cell.description) {
-                            gridItem.dataset.description = JSON.stringify(cell.description);
-                        }
-                    } else {
-                        gridItem.textContent = '';
-                    }
-                    fragment.appendChild(gridItem);
-                }
-            }
-            gridContainer.appendChild(fragment);
-            updateStatus();
-        }
-
-        function handleMovement(direction) {
-            const { x, y } = playerPosition;
-            let newX = x;
-            let newY = y;
-            if (direction === 'ArrowUp' && x > 0) newX -= 1;
-            if (direction === 'ArrowDown' && x < gridSize - 1) newX += 1;
-            if (direction === 'ArrowLeft' && y > 0) newY -= 1;
-            if (direction === 'ArrowRight' && y < gridSize - 1) newY += 1;
-
-            const targetCell = gridState[newX][newY];
-            playerPosition = { x: newX, y: newY };
-            if (targetCell.type) {
-                if (targetCell.type === 'star') {
-                    // Player is on a random star
-                } else if (targetCell.type === 'galaxy') {
-                    travelToNewGalaxy(targetCell.name);
-                    return; // Prevents generating the grid again on the same move
-                } else if (targetCell.type === 'blackhole') {
-                    encounterBlackHole();
-                    return; // Prevents further actions after encountering a black hole
-                }
-            }
-            if (blackHolePosition) {
-                movePlayerCloserToBlackHole();
-            }
-            renderGrid(); // Only update the grid without regenerating
-        }
-
-        function handleMouseClickLeft() {
-            const { x, y } = playerPosition;
-            const targetCell = gridState[x][y];
-            if (targetCell.type === 'star') {
-                extractResources(targetCell.name, targetCell.description);
+function isAreaEmpty(x, y) {
+    const offsets = [-1, 0, 1];
+    for (let dx of offsets) {
+        for (let dy of offsets) {
+            const nx = x + dx;
+            const ny = y + dy;
+            if (nx >= 0 && nx < gridSize && ny >= 0 && ny < gridSize && gridState[nx][ny].type !== 'empty') {
+                return false;
             }
         }
+    }
+    return true;
+}
 
-        function handleMouseClickRight() {
-            if (warpDrive) {
-                travelToNewGalaxy(galaxies[Math.floor(Math.random() * galaxies.length)]);
+function isAdjacentToBlackHole(x, y) {
+    const offsets = [-1, 0, 1];
+    for (let dx of offsets) {
+        for (let dy of offsets) {
+            const nx = x + dx;
+            const ny = y + dy;
+            if (blackHolePosition && nx === blackHolePosition.x && ny === blackHolePosition.y) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+function generateStarDescription(starType) {
+    const names = ['Zeta', 'Alpha', 'Omega', 'Delta', 'Epsilon'];
+    const spaceProperties = ['High Gravity', 'Low Gravity', 'Radiation Zone', 'Magnetic Fields'];
+    const weatherPatterns = ['Solar Flares', 'Calm', 'Stormy', 'Windy'];
+    const dangerLevels = ['Low', 'Medium', 'High', 'Extreme'];
+    const resources = ['Helium', 'Iron', 'Gold', 'Uranium', 'Hydrogen'];
+
+    return {
+        name: `${names[Math.floor(Math.random() * names.length)]} ${starType}`,
+        spaceProperties: spaceProperties[Math.floor(Math.random() * spaceProperties.length)],
+        weatherPatterns: weatherPatterns[Math.floor(Math.random() * weatherPatterns.length)],
+        dangerLevel: dangerLevels[Math.floor(Math.random() * dangerLevels.length)],
+        resources: resources[Math.floor(Math.random() * resources.length)]
+    };
+}
+
+function renderGrid() {
+    const gridContainer = document.getElementById('game-grid');
+    gridContainer.innerHTML = ''; // Clears the 'game-grid' container
+
+    const fragment = document.createDocumentFragment();
+    for (let i = 0; i < gridSize; i++) {
+        for (let j = 0; j < gridSize; j++) {
+            const gridItem = document.createElement('div');
+            gridItem.classList.add('game-grid-item');
+            const cell = gridState[i][j];
+            if (i === playerPosition.x && j === playerPosition.y) {
+                gridItem.classList.add('ship');
+                gridItem.textContent = '🚀';
+            } else if (cell.type !== 'empty') {
+                gridItem.classList.add(cell.type);
+                gridItem.textContent = cell.emoji;
+                gridItem.dataset.type = cell.type;
+                gridItem.dataset.name = cell.name;
+                if (cell.description) {
+                    gridItem.dataset.description = JSON.stringify(cell.description);
+                }
             } else {
-                showMessage('You need a warp drive to warp out of a galaxy!');
+                gridItem.textContent = '';
             }
+            fragment.appendChild(gridItem);
         }
+    }
+    gridContainer.appendChild(fragment);
+    updateStatus();
+}
 
-        function extractResources(star, description) {
-            const extracted = resourceValues[star];
-            if (resources + extracted > storage) {
-                showMessage(`Not enough storage! Extracted resources exceed storage capacity.`);
-            } else {
-                resources += extracted;
-                showMessage(`You extracted ${extracted} resources from the ${description.name} star.`);
+function handleMovement(direction) {
+    const { x, y } = playerPosition;
+    let newX = x;
+    let newY = y;
+    if (direction === 'ArrowUp' && x > 0) newX -= 1;
+    if (direction === 'ArrowDown' && x < gridSize - 1) newX += 1;
+    if (direction === 'ArrowLeft' && y > 0) newY -= 1;
+    if (direction === 'ArrowRight' && y < gridSize - 1) newY += 1;
 
-                // Update Star Descriptions
-                document.getElementById('star-name').textContent = description.name;
-                document.getElementById('star-properties').textContent = description.spaceProperties;
-                document.getElementById('star-weather').textContent = description.weatherPatterns;
-                document.getElementById('star-danger').textContent = description.dangerLevel;
-                document.getElementById('star-resources').textContent = description.resources;
-
-                checkMerchantRequirement(currentGalaxy, star, extracted);
-            }
+    const targetCell = gridState[newX][newY];
+    playerPosition = { x: newX, y: newY };
+    if (targetCell.type) {
+        if (targetCell.type === 'star') {
+            // Player is on a random star
+        } else if (targetCell.type === 'galaxy') {
+            travelToNewGalaxy(targetCell.name);
+            return; // Prevents generating the grid again on the same move
+        } else if (targetCell.type === 'blackhole') {
+            encounterBlackHole();
+            return; // Prevents further actions after encountering a black hole
         }
+    }
+    if (blackHolePosition) {
+        movePlayerCloserToBlackHole();
+    }
+    renderGrid(); // Only update the grid without regenerating
+}
 
-        function travelToNewGalaxy(galaxy) {
-            currentGalaxy = galaxy;
-            playerPosition = { x: Math.floor(gridSize / 2), y: Math.floor(gridSize / 2) };
-            showMessage(`You have traveled to the ${galaxy} galaxy.`);
-
-            // Change Border Colour of containers
-            const gridContainer = document.getElementById('game-grid');
-            const starContainer = document.getElementById('star-description');
-            const merchantContainer = document.getElementById('merchant-container');
-            const controlContrainer = document.querySelectorAll('#movement-buttons button');
-            const statusContainer = document.getElementById('status');
-            const shopContainer = document.getElementById('shop');
-
-            const randomColor = borderColors[Math.floor(Math.random() * borderColors.length)];
-
-            gridContainer.style.borderColor = randomColor;
-            starContainer.style.borderColor = randomColor;
-            merchantContainer.style.borderColor = randomColor;
-
-            controlContrainer.forEach(button => {
-                button.style.borderColor = randomColor;
-            });
-
-            statusContainer.style.borderColor = randomColor;
-            shopContainer.style.borderColor = randomColor;
-
-            // Regenerate the grid with new stars and galaxies
-            generateGrid(true);
-        }
-
-        function updateStatus() {
-            document.getElementById('current-galaxy').textContent = currentGalaxy;
-            document.getElementById('resources').textContent = resources;
-            document.getElementById('credits').textContent = credits;
-            document.getElementById('storage').textContent = storage;
-            document.getElementById('warp-drive').textContent = warpDrive ? 'Yes' : 'No';
-        }
-
-        function showMessage(message) {
-            document.getElementById('message').textContent = message;
-        }
-
-        function movePlayerCloserToBlackHole() {
-            const { x: px, y: py } = playerPosition;
-            const { x: bx, y: by } = blackHolePosition;
-
-            if (px < bx) {
-                playerPosition.x += 1;
-            } else if (px > bx) {
-                playerPosition.x -= 1;
-            }
-
-            if (py < by) {
-                playerPosition.y += 1;
-            } else if (py > by) {
-                playerPosition.y -= 1;
-            }
-
-            // Check if the player has been pulled into the black hole
-            if (playerPosition.x === bx && playerPosition.y === by) {
-                const loss = Math.min(resources, 50); // Lose up to 50 resources
-                resources -= loss;
-                showMessage(`You encountered a Black Hole and lost ${loss} resources.`);
-                blackHolePosition = null; // Reset the black hole position
-                generateGrid(true); // Refresh the grid with a new random selection
-            }
-        }
-
-        function displayMerchants() {
-            const merchantContainer = document.getElementById('merchants');
-            merchantContainer.innerHTML = '';
-            merchants.forEach((merchant, index) => {
-                const merchantItem = document.createElement('div');
-                merchantItem.classList.add('merchant-item');
-                if (selectedMerchant === merchant) {
-                    merchantItem.classList.add('selected');
-                }
-                merchantItem.textContent = `${merchant.name} - Requires: ${merchant.requiredGalaxy} - ${merchant.requiredStar} - Reward: ${merchant.reward} credits`;
-                merchantItem.addEventListener('click', () => selectMerchant(index));
-                merchantContainer.appendChild(merchantItem);
-            });
-        }
-        function selectMerchant(index) {
-            selectedMerchant = merchants[index];
-            showMessage(`You have selected ${selectedMerchant.name}.`);
-            displayMerchants(); // Refresh merchant display to highlight selected merchant
-        }
-
-        function checkMerchantRequirement(galaxy, star, extracted) {
-            if (selectedMerchant &&
-                selectedMerchant.requiredGalaxy === galaxy &&
-                selectedMerchant.requiredStar === star &&
-                extracted > 0) {
-                credits += selectedMerchant.reward;
-                showMessage(`You have completed the requirement for ${selectedMerchant.name} and earned ${selectedMerchant.reward} credits!`);
-                merchants.splice(merchants.indexOf(selectedMerchant), 1);
-                selectedMerchant = null;
-                displayMerchants(); // Reset merchant selection and refresh the list
-                updateStatus();
-            }
-        }
-
-        function refreshMerchants() {
-            merchants = [];
-            for (let i = 0; i < 4; i++) {
-                addMerchant();
-            }
-            displayMerchants();
-        }
-
-        function addMerchant() {
-            if (merchants.length < 4) {
-                const newMerchant = {
-                    name: `Merchant ${String.fromCharCode(65 + merchants.length)}`,
-                    requiredGalaxy: galaxy[Math.floor(Math.random() * galaxy.length)],
-                    requiredStar: star[Math.floor(Math.random() * star.length)],
-                    reward: Math.floor(Math.random() * 201) + 50 // Reward between 50 and 250 credits
-                };
-                merchants.push(newMerchant);
-                displayMerchants();
-            } else {
-                showMessage('Maximum of 4 merchants at a time.');
-            }
-        }
-
-        function buyStorage() {
-            if (credits >= 100) {
-                storage += 50;
-                credits -= 100;
-                showMessage('Storage increased by 50!');
-                updateStatus();
-            } else {
-                showMessage('Not enough credits to buy storage!');
-            }
-        }
-
-        function buyWarpDrive() {
-            if (credits >= 500) {
-                warpDrive = true;
-                credits -= 500;
-                showMessage('Warp drive purchased!');
-                updateStatus();
-            } else {
-                showMessage('Not enough credits to buy a warp drive!');
-            }
-        }
-        // .*. //
+function handleMouseClickLeft() {
+    const { x, y } = playerPosition;
+    const targetCell = gridState[x][y];
+    if (targetCell.type === 'star') {
+        extractResources(targetCell.name, targetCell.description);
     }
 }
+
+function handleMouseClickRight() {
+    if (warpDrive) {
+        travelToNewGalaxy(galaxies[Math.floor(Math.random() * galaxies.length)]);
+    } else {
+        showMessage('You need a warp drive to warp out of a galaxy!');
+    }
+}
+
+function extractResources(star, description) {
+    const extracted = resourceValues[star];
+    if (resources + extracted > storage) {
+        showMessage(`Not enough storage! Extracted resources exceed storage capacity.`);
+    } else {
+        resources += extracted;
+        showMessage(`You extracted ${extracted} resources from the ${description.name} star.`);
+
+        // Update Star Descriptions
+        document.getElementById('star-name').textContent = description.name;
+        document.getElementById('star-properties').textContent = description.spaceProperties;
+        document.getElementById('star-weather').textContent = description.weatherPatterns;
+        document.getElementById('star-danger').textContent = description.dangerLevel;
+        document.getElementById('star-resources').textContent = description.resources;
+
+        checkMerchantRequirement(currentGalaxy, star, extracted);
+    }
+}
+
+function travelToNewGalaxy(galaxy) {
+    currentGalaxy = galaxy;
+    playerPosition = { x: Math.floor(gridSize / 2), y: Math.floor(gridSize / 2) };
+    showMessage(`You have traveled to the ${galaxy} galaxy.`);
+
+    // Change Border Colour of containers
+    const gridContainer = document.getElementById('game-grid');
+    const starContainer = document.getElementById('star-description');
+    const merchantContainer = document.getElementById('merchant-container');
+    const controlContrainer = document.querySelectorAll('#movement-buttons button');
+    const statusContainer = document.getElementById('status');
+    const shopContainer = document.getElementById('shop');
+
+    const randomColor = borderColors[Math.floor(Math.random() * borderColors.length)];
+
+    gridContainer.style.borderColor = randomColor;
+    starContainer.style.borderColor = randomColor;
+    merchantContainer.style.borderColor = randomColor;
+
+    controlContrainer.forEach(button => {
+        button.style.borderColor = randomColor;
+    });
+
+    statusContainer.style.borderColor = randomColor;
+    shopContainer.style.borderColor = randomColor;
+
+    // Regenerate the grid with new stars and galaxies
+    generateGrid(true);
+}
+
+function updateStatus() {
+    document.getElementById('current-galaxy').textContent = currentGalaxy;
+    document.getElementById('resources').textContent = resources;
+    document.getElementById('credits').textContent = credits;
+    document.getElementById('storage').textContent = storage;
+    document.getElementById('warp-drive').textContent = warpDrive ? 'Yes' : 'No';
+}
+
+function showMessage(message) {
+    document.getElementById('message').textContent = message;
+}
+
+function movePlayerCloserToBlackHole() {
+    const { x: px, y: py } = playerPosition;
+    const { x: bx, y: by } = blackHolePosition;
+
+    if (px < bx) {
+        playerPosition.x += 1;
+    } else if (px > bx) {
+        playerPosition.x -= 1;
+    }
+
+    if (py < by) {
+        playerPosition.y += 1;
+    } else if (py > by) {
+        playerPosition.y -= 1;
+    }
+
+    // Check if the player has been pulled into the black hole
+    if (playerPosition.x === bx && playerPosition.y === by) {
+        const loss = Math.min(resources, 50); // Lose up to 50 resources
+        resources -= loss;
+        showMessage(`You encountered a Black Hole and lost ${loss} resources.`);
+        blackHolePosition = null; // Reset the black hole position
+        generateGrid(true); // Refresh the grid with a new random selection
+    }
+}
+
+function displayMerchants() {
+    const merchantContainer = document.getElementById('merchants');
+    merchantContainer.innerHTML = '';
+    merchants.forEach((merchant, index) => {
+        const merchantItem = document.createElement('div');
+        merchantItem.classList.add('merchant-item');
+        if (selectedMerchant === merchant) {
+            merchantItem.classList.add('selected');
+        }
+        merchantItem.textContent = `${merchant.name} - Requires: ${merchant.requiredGalaxy} - ${merchant.requiredStar} - Reward: ${merchant.reward} credits`;
+        merchantItem.addEventListener('click', () => selectMerchant(index));
+        merchantContainer.appendChild(merchantItem);
+    });
+}
+function selectMerchant(index) {
+    selectedMerchant = merchants[index];
+    showMessage(`You have selected ${selectedMerchant.name}.`);
+    displayMerchants(); // Refresh merchant display to highlight selected merchant
+}
+
+function checkMerchantRequirement(galaxy, star, extracted) {
+    if (selectedMerchant &&
+        selectedMerchant.requiredGalaxy === galaxy &&
+        selectedMerchant.requiredStar === star &&
+        extracted > 0) {
+        credits += selectedMerchant.reward;
+        showMessage(`You have completed the requirement for ${selectedMerchant.name} and earned ${selectedMerchant.reward} credits!`);
+        merchants.splice(merchants.indexOf(selectedMerchant), 1);
+        selectedMerchant = null;
+        displayMerchants(); // Reset merchant selection and refresh the list
+        updateStatus();
+    }
+}
+
+function refreshMerchants() {
+    merchants = [];
+    for (let i = 0; i < 4; i++) {
+        addMerchant();
+    }
+    displayMerchants();
+}
+
+function addMerchant() {
+    if (merchants.length < 4) {
+        const newMerchant = {
+            name: `Merchant ${String.fromCharCode(65 + merchants.length)}`,
+            requiredGalaxy: galaxy[Math.floor(Math.random() * galaxy.length)],
+            requiredStar: star[Math.floor(Math.random() * star.length)],
+            reward: Math.floor(Math.random() * 201) + 50 // Reward between 50 and 250 credits
+        };
+        merchants.push(newMerchant);
+        displayMerchants();
+    } else {
+        showMessage('Maximum of 4 merchants at a time.');
+    }
+}
+
+function buyStorage() {
+    if (credits >= 100) {
+        storage += 50;
+        credits -= 100;
+        showMessage('Storage increased by 50!');
+        updateStatus();
+    } else {
+        showMessage('Not enough credits to buy storage!');
+    }
+}
+
+function buyWarpDrive() {
+    if (credits >= 500) {
+        warpDrive = true;
+        credits -= 500;
+        showMessage('Warp drive purchased!');
+        updateStatus();
+    } else {
+        showMessage('Not enough credits to buy a warp drive!');
+    }
+}
+// .*. //
+
+// || FULLSCREEN CODE
+// Check if the browser supports the Fullscreen API
+if (document.documentElement.requestFullscreen) {
+    // Function to enter fullscreen mode
+    function enterFullscreen() {
+        if (document.documentElement.requestFullscreen) {
+            document.documentElement.requestFullscreen();
+        } else if (document.documentElement.mozRequestFullScreen) { // Firefox
+            document.documentElement.mozRequestFullScreen();
+        } else if (document.documentElement.webkitRequestFullscreen) { // Chrome, Safari, and Opera
+            document.documentElement.webkitRequestFullscreen();
+        } else if (document.documentElement.msRequestFullscreen) { // IE/Edge
+            document.documentElement.msRequestFullscreen();
+        }
+    }
+
+    // Function to exit fullscreen mode
+    function exitFullscreen() {
+        if (document.exitFullscreen) {
+            document.exitFullscreen();
+        } else if (document.mozCancelFullScreen) { // Firefox
+            document.mozCancelFullScreen();
+        } else if (document.webkitExitFullscreen) { // Chrome, Safari, and Opera
+            document.webkitExitFullscreen();
+        } else if (document.msExitFullscreen) { // IE/Edge
+            document.msExitFullscreen();
+        }
+    }
+
+    // Add event listeners to enter/exit fullscreen on button click
+    var fullscreenButton = document.getElementById('fullscreen-button');
+
+    fullscreenButton.addEventListener('click', function () {
+        if (document.fullscreenElement || document.mozFullScreenElement || document.webkitFullscreenElement || document.msFullscreenElement) {
+            exitFullscreen();
+        } else {
+            enterFullscreen();
+        }
+    });
+}
+// .*. //
