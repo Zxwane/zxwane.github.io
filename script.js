@@ -1,4 +1,6 @@
-﻿var isLoading = true;
+﻿console.log("Version 1.0");
+
+var isLoading = true;
 var isGame = false;
 
 if (isLoading == true) {
