@@ -20,7 +20,7 @@
       <div id="unity-footer">
         <!--<div id="unity-webgl-logo"></div>-->
         <div id="unity-fullscreen-button"></div>
-        <div id="unity-build-title">01_Remus_221146T_A2</div>
+        <!--<div id="unity-build-title">01_Remus_221146T_A2</div>-->
       </div>
     </div>
     <script>
@@ -89,8 +89,7 @@
         // To lower canvas resolution on mobile devices to gain some
         // performance, uncomment the following line:
         // config.devicePixelRatio = 1;
-		
-		forceLandscapeAndFullscreen();
+
 
       } else {
         // Desktop style: Render the game canvas in a window that can be maximized to fullscreen:
@@ -102,22 +101,6 @@
       loadingBar.style.display = "block";
 
       var script = document.createElement("script");
-	  
-	  	  if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
-				  // Lock Orientation to Landscape
-				  screen.orientation.lock('landscape').catch(err => console.log("Orientation Lock Failed:", err));
-
-				  // Request Fullscreen Mode
-				  let canvas = document.getElementById("unity-canvas");
-				  if (canvas) {
-					  canvas.requestFullscreen().catch(err => console.log("Fullscreen Request Failed:", err));
-				  }
-		  }
-
-		  document.addEventListener("DOMContentLoaded", function () {
-			  forceLandscapeAndFullscreen();
-		  });
-
       script.src = loaderUrl;
       script.onload = () => {
         createUnityInstance(canvas, config, (progress) => {
