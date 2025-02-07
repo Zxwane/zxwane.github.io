@@ -85,20 +85,12 @@
         document.getElementsByTagName('head')[0].appendChild(meta);
         container.className = "unity-mobile";
         canvas.className = "unity-mobile";
-		
-		// Lock Orientation to Landscape
-          screen.orientation.lock('landscape').catch(err => console.log("Orientation Lock Failed:", err));
-
-          // Request Fullscreen Mode
-          let canvas = document.getElementById("unity-canvas");
-          if (canvas) {
-              canvas.requestFullscreen().catch(err => console.log("Fullscreen Request Failed:", err));
-          }
 
         // To lower canvas resolution on mobile devices to gain some
         // performance, uncomment the following line:
         // config.devicePixelRatio = 1;
-
+		
+		forceLandscapeAndFullscreen();
 
       } else {
         // Desktop style: Render the game canvas in a window that can be maximized to fullscreen:
@@ -111,6 +103,25 @@
 
       var script = document.createElement("script");
 	  
+	  <script>
+		  function forceLandscapeAndFullscreen() {
+			  if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+				  // Lock Orientation to Landscape
+				  screen.orientation.lock('landscape').catch(err => console.log("Orientation Lock Failed:", err));
+
+				  // Request Fullscreen Mode
+				  let canvas = document.getElementById("unity-canvas");
+				  if (canvas) {
+					  canvas.requestFullscreen().catch(err => console.log("Fullscreen Request Failed:", err));
+				  }
+			  }
+		  }
+
+		  document.addEventListener("DOMContentLoaded", function () {
+			  forceLandscapeAndFullscreen();
+		  });
+	 </script>
+
       script.src = loaderUrl;
       script.onload = () => {
         createUnityInstance(canvas, config, (progress) => {
