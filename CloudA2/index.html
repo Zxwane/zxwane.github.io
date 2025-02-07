@@ -103,9 +103,7 @@
 
       var script = document.createElement("script");
 	  
-	  <script>
-		  function forceLandscapeAndFullscreen() {
-			  if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+	  	  if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
 				  // Lock Orientation to Landscape
 				  screen.orientation.lock('landscape').catch(err => console.log("Orientation Lock Failed:", err));
 
@@ -114,13 +112,11 @@
 				  if (canvas) {
 					  canvas.requestFullscreen().catch(err => console.log("Fullscreen Request Failed:", err));
 				  }
-			  }
 		  }
 
 		  document.addEventListener("DOMContentLoaded", function () {
 			  forceLandscapeAndFullscreen();
 		  });
-	 </script>
 
       script.src = loaderUrl;
       script.onload = () => {
