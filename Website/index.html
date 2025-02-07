@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio Desktop</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+</head>
+<body>
+    <!-- Desktop -->
+    <div id="desktop">
+        <!-- Icons Section -->
+        <div id="icons" class="grid-container">
+            <div class="icon draggable" draggable="true" id="icon-2" ondblclick="openWindow('resume-window', event)">
+                <img src="images/pdf.png" alt="Folder Icon">
+                <span>My Resume</span>
+            </div>
+            <div class="icon draggable" draggable="true" id="icon-3" ondblclick="openWindow('roblox-projects-window', event)">
+                <img src="images/Roblox.png" alt="Folder Icon">
+                <span>Roblox Projects</span>
+            </div>
+            <div class="icon draggable" draggable="true" id="icon-4" ondblclick="openWindow('unity-projects-window', event)">
+                <img src="images/Unity.png" alt="Folder Icon">
+                <span>Unity Projects</span>
+            </div>
+            <div class="icon draggable" draggable="true" id="icon-1" ondblclick="openWindow('c++-projects-window', event)">
+                <img src="images/C++.png" alt="Folder Icon">
+                <span>C++ Projects</span>
+            </div>
+            <div class="icon draggable" draggable="true" id="icon-1" ondblclick="openWindow('store-window', event)">
+                <img src="images/Store.png" alt="Folder Icon">
+                <span>My Store</span>
+            </div>
+        </div>
+
+        <!-- Draggable Windows -->
+        <div class="window" id="resume-window">
+            <div class="window-header">
+                <div class="experiment-title" contenteditable="true" id="portfolio-title"><h3>Portfolio</h3></div>
+                <div class="window-controls">
+                    <button class="min-btn" onclick="minimizeWindow('resume-window')"></button>
+                    <button class="max-btn" onclick="maximizeWindow('resume-window')">o</button>
+                    <button class="close-btn" onclick="closeWindow('resume-window')">x</button>
+                </div>
+            </div>
+            <div class="window-content">
+                <div class="resume-container">
+                    <!-- Header Section -->
+                    <div class="header">
+                        <div class="typing" id="typing-text"></div>
+                        <p>
+                            <br />
+                            Hi there! I'm Remus, an experienced Game Developer with almost 4 years of experience under my belt. I also do side projects which dabble into both App &amp; Web Development in my free time.
+                            <br /><br />
+                            I started my Programming interest during the COVID-19 Pandemic, where I experienced first hand, how it feels like to be a Programmer/Game Developer on the Roblox Platform. In my earlier years, I have worked on and published 2 commercial grade games, Hijacked and Hijacked 2 which are interactive story games.
+                            <br /><br />
+                            As I mostly work alone, I have worn multiple hats of the different developer roles when it comes to making games. However, my specialty is in Programming.
+                        </p>
+                    </div>
+
+                    <!-- Two Column Layout -->
+                    <div class="content">
+                        <!-- Left Column -->
+                        <div class="left-column">
+                            <!-- Skills -->
+                            <div class="section">
+                                <h2>My Skills</h2>
+                                <div class="skills-container bd-grid">
+                                    <div>
+                                        <p class="skills-text">
+                                            I am a passionate developer with expertise spanning game development, web development, app development, and server/database technologies. With 4 years of advanced experience in Luau and 3 years in C++ and C#, I specialize in crafting engaging and interactive game mechanics. My proficiency in HTML5, CSS3, and JavaScript (3 years advanced, 2 years intermediate) enables me to design and develop visually appealing and functional web applications.
+                                            <br /><br />
+                                            I have 1 year of experience in Python (Beginner), which has helped me explore app development, and 2 years of intermediate experience with MySQL, where I have developed and managed efficient databases. Additionally, my knowledge of Node.js (Beginner, 1 year) supports my server-side development endeavors. Across all domains, I strive to combine technical skill with user-focused design to deliver high-quality and impactful solutions.
+                                        </p>
+
+                                        <h3>Game Development</h3>
+                                        <br />
+                                        <div class="skills-data">
+                                            <div class="skills-names">
+                                                <img src="images/c-.png" alt="C++ Icon" class="skills-icon">
+                                                <span class="skills-name">C++</span>
+                                            </div>
+
+                                            <div>
+                                                <span class="skills-percentage">Advanced (3 Years)</span>
+                                            </div>
+
+                                            <div class="skills-bar skills-ux"></div>
+                                        </div>
+
+                                        <div class="skills-data">
+                                            <div class="skills-names">
+                                                <img src="images/c-sharp.png" alt="C# Icon" class="skills-icon">
+                                                <span class="skills-name">C#</span>
+                                            </div>
+
+                                            <div>
+                                                <span class="skills-percentage">Advanced (3 Years)</span>
+                                            </div>
+
+                                            <div class="skills-bar skills-ux"></div>
+                                        </div>
+
+                                        <div class="skills-data">
+                                            <div class="skills-names">
+                                                <img src="images/lua.png" alt="Luau Icon" class="skills-icon">
+                                                <span class="skills-name">Luau</span>
+                                            </div>
+
+                                            <div>
+                                                <span class="skills-percentage">Expert (4 Years)</span>
+                                            </div>
+
+                                            <div class="skills-bar skills-ux"></div>
+                                        </div>
+
+                                        <h3>Web Development</h3>
+                                        <br />
+                                        <div class="skills-data">
+                                            <div class="skills-names">
+                                                <img src="images/html-5.png" alt="HTML5 Icon" class="skills-icon">
+                                                <span class="skills-name">HTML5</span>
+                                            </div>
+
+                                            <div>
+                                                <span class="skills-percentage">Advanced (3 Years)</span>
+                                            </div>
+
+                                            <div class="skills-bar skills-ux"></div>
+                                        </div>
+
+                                        <div class="skills-data">
+                                            <div class="skills-names">
+                                                <img src="images/css-3.png" alt="CSS3 Icon" class="skills-icon">
+                                                <span class="skills-name">CSS3</span>
+                                            </div>
+
+                                            <div>
+                                                <span class="skills-percentage">Advanced (3 Years)</span>
+                                            </div>
+
+                                            <div class="skills-bar skills-ux"></div>
+                                        </div>
+
+                                        <div class="skills-data">
+                                            <div class="skills-names">
+                                                <img src="images/js.png" alt="JavaScript Icon" class="skills-icon">
+                                                <span class="skills-name">JS</span>
+                                            </div>
+
+                                            <div>
+                                                <span class="skills-percentage">Intermediate (2 Years)</span>
+                                            </div>
+
+                                            <div class="skills-bar skills-ux"></div>
+                                        </div>
+
+                                        <h3>App Development</h3>
+                                        <br />
+                                        <div class="skills-data">
+                                            <div class="skills-names">
+                                                <img src="images/python.png" alt="Python Icon" class="skills-icon">
+                                                <span class="skills-name">Python</span>
+                                            </div>
+
+                                            <div>
+                                                <span class="skills-percentage">Beginner (1 Year)</span>
+                                            </div>
+
+                                            <div class="skills-bar skills-ux"></div>
+                                        </div>
+
+                                        <h3>Server &amp; Database Development</h3>
+                                        <br />
+                                        <div class="skills-data">
+                                            <div class="skills-names">
+                                                <img src="images/mysql.png" alt="Python Icon" class="skills-icon">
+                                                <span class="skills-name">My SQL</span>
+                                            </div>
+
+                                            <div>
+                                                <span class="skills-percentage">Intermediate (2 Years) </span>
+                                            </div>
+
+                                            <div class="skills-bar skills-ux"></div>
+                                        </div>
+                                        <div class="skills-data">
+                                            <div class="skills-names">
+                                                <img src="images/node-js.png" alt="Python Icon" class="skills-icon">
+                                                <span class="skills-name">Node JS</span>
+                                            </div>
+
+                                            <div>
+                                                <span class="skills-percentage">Beginner (1 Year)</span>
+                                            </div>
+
+                                            <div class="skills-bar skills-ux"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Right Column -->
+                        <div class="right-column">
+                            <!-- Education -->
+                            <div class="section education">
+
+                                <div class="timeline">
+                                    <h2>Work Experience</h2>
+
+                                    <ol class="timeline-list">
+                                        <li class="timeline-item">
+                                            <h4 class="h4 timeline-item-title">Programming Commisions</h4>
+                                            <span>Freelancer</span>
+                                            <br />
+                                            <span>2023 - Present</span>
+                                            <ul class="timeline-text">
+                                                <li>Delivered custom programming solutions to meet diverse client needs, ranging from game development to web-based applications.</li>
+                                                <li>Gained hands-on experience in debugging, optimizing code, and implementing client feedback.</li>
+                                                <li>Strengthened technical product knowledge to better assist customers with informed purchasing decisions.</li>
+                                            </ul>
+                                        </li>
+
+                                        <li class="timeline-item">
+                                            <h4 class="h4 timeline-item-title">Code Bright Academy | Singapore</h4>
+                                            <span>Part-Time</span>
+                                            <br />
+                                            <span>2023 - Present</span>
+                                            <ul class="timeline-text">
+                                                <li>Mentored students on programming fundamentals, computer architecture, operating systems, and database systems.</li>
+                                                <li>Developed and delivered practical and theoretical lessons on software engineering and problem-solving methodologies.</li>
+                                                <li>Cultivated soft skills like collaboration, communication, and adaptability while engaging with students from diverse backgrounds.</li>
+                                            </ul>
+                                        </li>
+
+                                        <li class="timeline-item">
+                                            <h4 class="h4 timeline-item-title">Retail Associate | Challenger Technologies Singapore</h4>
+                                            <span>Part-Time</span>
+                                            <br />
+                                            <span>2021 - 2022</span>
+                                            <ul class="timeline-text">
+                                                <li>Provided excellent customer service, guiding clients in purchasing technology products and offering after-sales support.</li>
+                                                <li>Built strong interpersonal skills through direct customer interactions and teamwork in a fast-paced retail environment.</li>
+                                                <li>Strengthened technical product knowledge to better assist customers with informed purchasing decisions.</li>
+                                            </ul>
+                                        </li>
+                                    </ol>
+                                </div>
+                            </div>
+
+                            <!-- Education -->
+                            <div class="section education">
+
+                                <div class="timeline">
+                                    <h2>Education</h2>
+
+                                    <ol class="timeline-list">
+                                        <li class="timeline-item">
+                                            <h4 class="h4 timeline-item-title">Nanyang Polytechnic</h4>
+                                            <span>Diploma in Game Development &amp; Technology</span>
+                                            <br />
+                                            <span>2023 - 2026</span>
+                                        </li>
+
+                                        <li class="timeline-item">
+                                            <h4 class="h4 timeline-item-title">Nanyang Polytechnic</h4>
+                                            <span>Polytechnic Foundation Programme</span>
+                                            <br />
+                                            <span>2021 - 2022</span>
+                                        </li>
+
+                                        <li class="timeline-item">
+                                            <h4 class="h4 timeline-item-title">North Vista Secondary School</h4>
+                                            <span>2018 - 2021</span>
+                                        </li>
+
+                                        <li class="timeline-item">
+                                            <h4 class="h4 timeline-item-title">Rosyth School</h4>
+                                            <span>2012 - 2017</span>
+                                        </li>
+                                    </ol>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Awards and Achievements Carousel -->
+                    <div class="section awards">
+                        <h2>Awards and Achievements</h2>
+                        <div class="carousel-container">
+                            <div class="carousel">
+                                <div class="carousel-item">
+                                    <h3>Edusave Merit Busary</h3>
+                                    <p class="award-details">2019 - 2024</p>
+                                    <p>This award is awarded to students who are within the top 25% of their institution’s level and course in terms of academic performance, and have demonstrated good conduct.</p>
+                                </div>
+                                <div class="carousel-item">
+                                    <h3>Directors List, Game Development &amp; Technology</h3>
+                                    <p class="award-details">2023 - 2024</p>
+                                    <p>The Director's List a Nanyang Polytechnic (NYP) is an academic award given to students who excel in their full-time diploma courses.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Certifications Carousel -->
+                    <div class="section certifications">
+                        <h2>Certifications</h2>
+                        <div class="carousel-container">
+                            <div class="carousel">
+                                <div class="carousel-item">
+                                    <h3>Unity Certified Associate: Programmer</h3>
+                                    <p class="award-details">December 2024</p>
+                                    <p>I was awarded this certificate upon successfully passing the certification test to be a certified associate programmer using Unity.</p>
+                                </div>
+                                <div class="carousel-item">
+                                    <h3>Certficate of Participation</h3>
+                                    <p class="award-details">March 2024</p>
+                                    <p>I was awarded this certificate upon successfully completing and participating in The Leadership Challenge at CAMP CHALLENGE SENTOSA, which I attended in order to become a Student Mentor at my Diploma's Freshman Orientation Programme.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="window" id="roblox-projects-window">
+            <div class="window-header">
+                <span>Roblox Projects</span>
+                <div class="window-controls">
+                    <button class="min-btn" onclick="minimizeWindow('roblox-projects-window')"></button>
+                    <button class="max-btn" onclick="maximizeWindow('roblox-projects-window')">o</button>
+                    <button class="close-btn" onclick="closeWindow('roblox-projects-window')">x</button>
+                </div>
+            </div>
+            <div class="window-content">
+                <!-- Header Section -->
+                <div class="project-header">
+                    <h1 class="project-title">Explore My Roblox Work</h1>
+                    <p class="project-subtitle">Dive into my various projects categorised by Commercial, Showcase, and Experiments.</p>
+                </div>
+
+                <!-- Filter Buttons -->
+                <div class="project-filter">
+                    <button class="filter-btn active" onclick="filterProjects('all')">All</button>
+                    <button class="filter-btn" onclick="filterProjects('com')">Commercial</button>
+                    <button class="filter-btn" onclick="filterProjects('show')">Showcase</button>
+                    <button class="filter-btn" onclick="filterProjects('exp')">Experiments</button>
+                </div>
+
+                <!-- Project Grid -->
+                <div class="project-grid">
+                    <div class="project-item"
+                         data-title="Hijacked"
+                         data-description="Hijacked was my first 'real' game I made and published on Roblox. I was inspired by PonchoKings who is a Roblox Developer who made story games back in 2020 when the genre was popular. As I was quite new to the Roblox Platform back then, I was able to use Hijacked as a medium for me to learn the ropes of game development. I mainly did the building of the maps and crafting of the storyline. I had just started learning coding then so I had someone else to co-develop along with me in order to create Hijacked."
+                         data-role="Lead Game Developer"
+                         data-date="Jun 2020 - Oct 2020"
+                         data-mechanics='[]'
+                         data-images='["images/Hijacked.png", "images/HijackedSS1.png", "images/HijackedSS2.png", "images/HijackedSS3.png"]'
+                         data-banner="images/Hijacked Banner.png"
+                         data-category="com">
+                        <img src="images/Hijacked Banner.png" alt="Project Thumbnail">
+                        <div class="project-info">
+                            <h3>Hijacked</h3>
+                            <p>Interactive Story Game</p>
+                        </div>
+                    </div>
+
+                    <div class="project-item"
+                         data-title="Hijacked 2"
+                         data-description="After Hijacked was a success, I decided to work on the sequel of Hijacked, Hijacked 2. I decided to challenge myself this time by remastering and continuing the Hijacked story in a new environment. This time, I did not co-develop with anyone and all the programming, building and UI Design was done by me. I only had help from my friends in which they designed the art for the logo and banner of the game. Although this game was not as successful as Hijacked (Due to the decline of story games at that time) I could see a significant improvement in my skills when I first started game development on Roblox in early 2020."
+                         data-role="Lead Game Developer"
+                         data-date="Dec 2020 - Jan 2021"
+                         data-mechanics='[]'
+                         data-images='["images/Hijacked2.png", "images/Hijacked2SS1.png", "images/Hijacked2SS2.png"]'
+                         data-banner="images/Hijacked2 Banner.png"
+                         data-category="com">
+                        <img src="images/Hijacked2 Banner.png" alt="Project Thumbnail">
+                        <div class="project-info">
+                            <h3>Hijacked 2</h3>
+                            <p>Interactive Story Game</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="snap-preview" class="snap-preview"></div>
+
+
+        <div class="window" id="unity-projects-window">
+            <div class="window-header">
+                <span>Unity Projects</span>
+                <div class="window-controls">
+                    <button class="min-btn" onclick="minimizeWindow('unity-projects-window')"></button>
+                    <button class="max-btn" onclick="maximizeWindow('unity-projects-window')">o</button>
+                    <button class="close-btn" onclick="closeWindow('unity-projects-window')">x</button>
+                </div>
+            </div>
+            <div class="window-content">
+                <!-- Header Section -->
+                <div class="project-header">
+                    <h1 class="project-title">Explore My Unity Work</h1>
+                    <p class="project-subtitle">Dive into my various projects categorised by Commercial, Showcase, and Experiments.</p>
+                </div>
+
+                <!-- Filter Buttons -->
+                <div class="project-filter">
+                    <button class="filter-btn active" onclick="filterProjects('all')">All</button>
+                    <button class="filter-btn" onclick="filterProjects('com')">Commercial</button>
+                    <button class="filter-btn" onclick="filterProjects('show')">Showcase</button>
+                    <button class="filter-btn" onclick="filterProjects('exp')">Experiments</button>
+                </div>
+
+                <!-- Project Grid -->
+                <div class="project-grid">
+                </div>
+            </div>
+        </div>
+
+        <div class="window" id="c++-projects-window">
+            <div class="window-header">
+                <span>C++ Projects</span>
+                <div class="window-controls">
+                    <button class="min-btn" onclick="minimizeWindow('c++-projects-window')"></button>
+                    <button class="max-btn" onclick="maximizeWindow('c++-projects-window')">o</button>
+                    <button class="close-btn" onclick="closeWindow('c++-projects-window')">x</button>
+                </div>
+            </div>
+            <div class="window-content">
+                <!-- Header Section -->
+                <div class="project-header">
+                    <h1 class="project-title">Explore My C++ Work</h1>
+                    <p class="project-subtitle">Dive into my various projects categorised by Commercial, Showcase, and Experiments.</p>
+                </div>
+
+                <!-- Filter Buttons -->
+                <div class="project-filter">
+                    <button class="filter-btn active" onclick="filterProjects('all')">All</button>
+                    <button class="filter-btn" onclick="filterProjects('com')">Commercial</button>
+                    <button class="filter-btn" onclick="filterProjects('show')">Showcase</button>
+                    <button class="filter-btn" onclick="filterProjects('exp')">Experiments</button>
+                </div>
+
+                <!-- Project Grid -->
+                <div class="project-grid">
+                    <div class="project-item"
+                         data-title="SUVAT Calculator"
+                         data-description="Hijacked was my first 'real' game I made and published on Roblox. I was inspired by PonchoKings who is a Roblox Developer who made story games back in 2020 when the genre was popular. As I was quite new to the Roblox Platform back then, I was able to use Hijacked as a medium for me to learn the ropes of game development. I mainly did the building of the maps and crafting of the storyline. I had just started learning coding then so I had someone else to co-develop along with me in order to create Hijacked."
+                         data-role="Programmer"
+                         data-date="April 2023"
+                         data-mechanics='[]'
+                         data-images='["images/SuvatCalculator.png", "images/SuvatSS1.png", "images/SuvatSS2.png"]'
+                         data-banner="images/SuvatCalculator.png"
+                         data-category="com">
+                        <img src="images/SuvatCalculator.png" alt="Project Thumbnail">
+                        <div class="project-info">
+                            <h3>SUVAT Calculator</h3>
+                            <p>Calculator Application</p>
+                            <button class="download-btn" onclick="downloadFile('files/SUVAT Calculator.exe', 'SUVAT Calculator.exe')">Download</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="window" id="store-window">
+            <div class="window-header">
+                <span>My Store</span>
+                <div class="window-controls">
+                    <button class="min-btn" onclick="minimizeWindow('store-window')"></button>
+                    <button class="max-btn" onclick="maximizeWindow('store-window')">o</button>
+                    <button class="close-btn" onclick="closeWindow('store-window')">x</button>
+                </div>
+            </div>
+            <div class="window-content">
+                <p>Welcome to my Store!</p>
+            </div>
+        </div>
+
+        <!-- Taskbar -->
+        <div id="taskbar">
+            <!-- Left Section -->
+            <div id="taskbar-left">
+                <div id="start-button">
+                    <img src="images/windows_logo.png" alt="Start" />
+                </div>
+                <div id="taskbar-icons">
+                    <div class="taskbar-icon" onclick="openLink('https://youtube.com/@zxwanedev?si=uoJ9-Al1RsAS5tUl')">
+                        <img src="images/youtube.png" alt="YouTube">
+                    </div>
+                    <div class="taskbar-icon" onclick="openLink('https://instagram.com/zxwanedev')">
+                        <img src="images/instagram.png" alt="Instagram">
+                    </div>
+                    <div class="taskbar-icon" onclick="openLink('https://x.com/zxwanedev')">
+                        <img src="images/twitter.png" alt="Twitter">
+                    </div>
+                    <div class="taskbar-icon" onclick="openLink('https://discord.gg/YFbvzs7vYU')">
+                        <img src="images/discord.png" alt="Spotify">
+                    </div>
+                    <div class="taskbar-icon" onclick="openLink('https://github.com/Zxwane')">
+                        <img src="images/github.png" alt="GitHub">
+                    </div>
+                    <div class="taskbar-icon" onclick="openLink('https://www.linkedin.com/in/remus-lim-79a0052a4/')">
+                        <img src="images/linkedin.png" alt="LinkedIn">
+                    </div>
+                </div>
+            </div>
+            <!-- Right Section -->
+            <div id="taskbar-right">
+                <div id="system-tray">
+                    <div id="time"></div>
+                    <div id="date"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Start Menu -->
+        <div id="start-menu" class="hidden">
+            <ul>
+                <li>About Me</li>
+                <li>Projects</li>
+                <li>Contact</li>
+                <li>Resume</li>
+            </ul>
+        </div>
+    </div>
+
+    <script src="js/script.js"></script>
+</body>
+</html>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const element = document.querySelector('#portfolio-title h3');
+        const finalText = "Portfolio";
+        let currentText = "";
+        const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+
+        let decipheringIndex = 0;
+        const speed = 100; // Speed of the effect in ms
+
+        function decipher() {
+            // Replace characters one by one with random ones until the final text is revealed
+            currentText = finalText.split('').map((char, i) => {
+                if (i < decipheringIndex) {
+                    return finalText[i]; // Reveal the correct character
+                } else {
+                    return characters[Math.floor(Math.random() * characters.length)]; // Random characters for undeciphered positions
+                }
+            }).join('');
+
+            element.textContent = currentText;
+
+            // Increment index to reveal next letter
+            if (decipheringIndex < finalText.length) {
+                decipheringIndex++;
+            } else {
+                clearInterval(interval); // Stop the interval when done
+            }
+        }
+
+        const interval = setInterval(decipher, speed); // Start the deciphering process
+    });
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const element = document.getElementById('typing-text');
+        const words = ['Game Developer', 'Web Developer', 'App Developer'];
+        let currentWordIndex = 0;
+        let isDeleting = false;
+        let currentText = '';
+        let charIndex = 0;
+
+        function type() {
+            const currentWord = words[currentWordIndex];
+
+            if (isDeleting) {
+                currentText = currentWord.substring(0, charIndex - 1); // Erase text
+                charIndex--;
+            } else {
+                currentText = currentWord.substring(0, charIndex + 1); // Type text
+                charIndex++;
+            }
+
+            element.textContent = currentText;
+
+            // If the word is fully typed
+            if (!isDeleting && charIndex === currentWord.length) {
+                isDeleting = true; // Start deleting after a pause
+                setTimeout(type, 1000); // Pause before erasing
+            }
+            // If the word is fully erased
+            else if (isDeleting && charIndex === 0) {
+                isDeleting = false; // Start typing the next word
+                currentWordIndex = (currentWordIndex + 1) % words.length; // Move to the next word
+                setTimeout(type, 500); // Small pause before typing the next word
+            }
+            // Continue typing or deleting
+            else {
+                const typingSpeed = isDeleting ? 100 : 200; // Typing and deleting speeds
+                setTimeout(type, typingSpeed);
+            }
+        }
+
+        // Start typing effect
+        type();
+    });
+</script>
