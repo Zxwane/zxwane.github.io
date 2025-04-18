@@ -724,3 +724,90 @@ function downloadFile(fileUrl, fileName) {
     a.click();
     document.body.removeChild(a); // Clean up after the download
 }
+
+// This script creates a dynamic background gradient based on local time
+document.addEventListener('DOMContentLoaded', function() {
+    // Function to update background based on time
+    function updateTimeBackground() {
+        const now = new Date();
+        const hour = now.getHours();
+        const minutes = now.getMinutes();
+        const totalMinutes = (hour * 60) + minutes;
+        
+        // Define time periods (in minutes since midnight)
+        const dawn = 5 * 60;       // 5:00 AM
+        const morning = 8 * 60;    // 8:00 AM
+        const noon = 12 * 60;      // 12:00 PM
+        const afternoon = 15 * 60; // 3:00 PM
+        const evening = 18 * 60;   // 6:00 PM
+        const night = 21 * 60;     // 9:00 PM
+        const midnight = 24 * 60;  // 12:00 AM
+        
+        let gradient;
+        
+        // Determine current time period and set appropriate gradient
+        if (totalMinutes >= 0 && totalMinutes < dawn) {
+            // Late night (Midnight - 5:00 AM): Deep blue to dark purple
+            gradient = "linear-gradient(to bottom, #0c0b2d, #1a1040)";
+        } else if (totalMinutes >= dawn && totalMinutes < morning) {
+            // Dawn (5:00 AM - 8:00 AM): Dark blue to orange and light blue
+            gradient = "linear-gradient(to bottom, #2b3595, #f67e7d, #94c5cc)";
+        } else if (totalMinutes >= morning && totalMinutes < noon) {
+            // Morning (8:00 AM - 12:00 PM): Light blue to light yellow
+            gradient = "linear-gradient(to bottom, #94c5cc, #f6da9c)";
+        } else if (totalMinutes >= noon && totalMinutes < afternoon) {
+            // Noon (12:00 PM - 3:00 PM): Light blue to light yellow
+            gradient = "linear-gradient(to bottom, #87ceeb, #e4f1fe)";
+        } else if (totalMinutes >= afternoon && totalMinutes < evening) {
+            // Afternoon (3:00 PM - 6:00 PM): Light blue to light orange
+            gradient = "linear-gradient(to bottom, #87ceeb, #ffd89b)";
+        } else if (totalMinutes >= evening && totalMinutes < night) {
+            // Evening (6:00 PM - 9:00 PM): Orange to purple
+            gradient = "linear-gradient(to bottom, #ff9966, #ff5e62)";
+        } else if (totalMinutes >= night && totalMinutes < midnight) {
+            // Night (9:00 PM - 12:00 AM): Dark blue to deeper blue
+            gradient = "linear-gradient(to bottom, #4b6cb7, #182848)";
+        }
+        
+        // Update background of body element
+        document.body.style.background = gradient;
+        document.body.style.backgroundAttachment = "fixed";
+        
+        // Display current time in console (for debugging)
+        console.log(`Current time: ${hour}:${minutes < 10 ? '0' + minutes : minutes} - Applied gradient for ${getTimePeriodName(totalMinutes)}`);
+    }
+    
+    // Helper function to get time period name
+    function getTimePeriodName(totalMinutes) {
+        if (totalMinutes >= 0 && totalMinutes < 5 * 60) return "Late Night";
+        if (totalMinutes >= 5 * 60 && totalMinutes < 8 * 60) return "Dawn";
+        if (totalMinutes >= 8 * 60 && totalMinutes < 12 * 60) return "Morning";
+        if (totalMinutes >= 12 * 60 && totalMinutes < 15 * 60) return "Noon";
+        if (totalMinutes >= 15 * 60 && totalMinutes < 18 * 60) return "Afternoon";
+        if (totalMinutes >= 18 * 60 && totalMinutes < 21 * 60) return "Evening";
+        return "Night";
+    }
+    
+    // Update background immediately on page load
+    updateTimeBackground();
+    
+    // Update background every minute
+    setInterval(updateTimeBackground, 60000);
+});
+
+document.addEventListener("DOMContentLoaded", function () {
+    // Simulate loading delay (remove this in production)
+    setTimeout(function () {
+        let loadingScreen = document.getElementById("loading-screen");
+        let content = document.getElementById("content");
+
+        // Fade out the loading screen
+        loadingScreen.classList.add("fade-out");
+
+        // Wait for fade-out transition, then remove loading screen
+        setTimeout(function () {
+            loadingScreen.style.display = "none";
+            content.style.display = "block";
+        }, 500);
+    }, 2000); // Simulate a 2-second loading time
+});
